@@ -1,0 +1,231 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPc0hRX0QF7E5opKvswqRli",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Renata00000/Chat-bot-com-API-Google-Gemini-/blob/main/chat_bot\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# **Fazendo a configuracao com a api do  gemani p poder criar o chat bot**"
+      ],
+      "metadata": {
+        "id": "h7abPWL1eISf"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "PQK9lFdAk-6p"
+      },
+      "outputs": [],
+      "source": [
+        "#instalando o JDK do google\n",
+        "!pip install -q -U google-generativeai"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import google.generativeai as genai\n",
+        "from google.colab import userdata\n",
+        "\n",
+        "GOOGLE_API_KEY=('COLOQUE A SUA KEY AQUI')\n",
+        "genai.configure(api_key=GOOGLE_API_KEY)"
+      ],
+      "metadata": {
+        "id": "29zoCwnwpEMe"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# listando modelos disponiveis.. versao\n",
+        "for m in genai.list_models():\n",
+        "  if 'generateContent' in m.supported_generation_methods:  # verifica se m contem generateContent\n",
+        "    print(m.name)"
+      ],
+      "metadata": {
+        "id": "5oTawhLpqlES"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "generation_config = {\n",
+        "      'candidate_count':1,\n",
+        "      'temperature':0.5\n",
+        "}"
+      ],
+      "metadata": {
+        "id": "C-1DCq_NyaZP"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "safety_settings = {\n",
+        "    'HARASSMENT': 'BLOCK_NONE',\n",
+        "    'HATE': 'BLOCK_NONE',\n",
+        "    'SEXUALLY_EXPLICIT': 'BLOCK_NONE',\n",
+        "}"
+      ],
+      "metadata": {
+        "id": "NtlKghswz79y"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "\n",
+        "model = genai.GenerativeModel(model_name='gemini-1.0-pro',\n",
+        "                        generation_config=generation_config,\n",
+        "                        safety_settings=safety_settings)"
+      ],
+      "metadata": {
+        "id": "Ad5eYcPB7Ipz"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "response = model.generate_content(\"Write a story about a magic backpack.\")\n",
+        "print(response.text)"
+      ],
+      "metadata": {
+        "id": "DRGVoICV6m0J"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# **Inicio do chat**"
+      ],
+      "metadata": {
+        "id": "IiL7IEUKebTq"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "chat = model.start_chat(history=[])"
+      ],
+      "metadata": {
+        "id": "YqERAS28eaWY"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "promp = input('Esperando texto: ')"
+      ],
+      "metadata": {
+        "id": "7zPJTEo6f-Z2"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "while promp != 'fim':\n",
+        "  response = chat.send_message(promp)\n",
+        "  print('Resposta:', response.text, '\\n')\n",
+        "  promp = input('Esperando texto: ')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 71
+        },
+        "id": "pKoupIdtgAfc",
+        "outputId": "a2b2e2d6-2b63-4fd0-ecb1-1fc46b8ab1de"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Resposta: Elon Musk \n",
+            "\n",
+            "Esperando texto: fim\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "j2aRlWD_gAa4"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "lRn20rTXgAW3"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "5DpgYR4-gAR5"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "5eXLBUu7f_9Y"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
